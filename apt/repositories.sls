@@ -124,7 +124,7 @@
   {%- endfor %}
 {% endfor %}
 
-{% if r_signedkey_file %}
+{% if r_signedkey_file != '' %}
 {{ r_signedkey_file }}:
   file.managed:
     - mode: '0644'
