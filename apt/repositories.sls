@@ -81,7 +81,6 @@
 {%- set r_distro = args.distro or 'stable' %}
 {%- set r_comps = args.comps|default(['main'])|join(' ') %}
 {%- set r_keyserver = args.keyserver if args.keyserver is defined else apt_map.default_keyserver %}
-{%- set r_signedkey_file = (r_opts[r_opts.lower().find('signed-by=') + 10:]).split()[0] %}
 
   {%- for type in args.type|d(['binary']) %}
     {%- set r_type = 'deb-src' if type == 'source' else 'deb' %}
@@ -122,7 +121,8 @@
   {%- endfor %}
 {% endfor %}
 
-{% if r_signedkey_file != '' %}
+{%- if 'signed-by=' in r_opts.lower() %}
+  {%- set r_signedkey_file = (r_opts[r_opts.lower().find('signed-by=') + 10:]).split()[0] %}
 {{ r_signedkey_file }}:
   file.managed:
     - mode: '0644'
